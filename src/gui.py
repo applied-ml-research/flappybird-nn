@@ -1,6 +1,7 @@
 import tkinter
 
-EVERY = 2000
+FPS = 30
+EVERY = 1000//FPS
 
 def update(root):
   print("tick")
