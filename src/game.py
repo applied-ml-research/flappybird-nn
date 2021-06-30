@@ -57,6 +57,7 @@ class Game:
     del self.poles
 
   def update(self, flying):
+    self.score += 1
     bird = self.bird
     if not bird.update(flying):
       self.cleanup()
