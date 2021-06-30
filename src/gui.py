@@ -1,16 +1,43 @@
+import game
+
 import tkinter
 
 FPS = 30
 EVERY = 1000//FPS
 
-def update(root):
-  print("tick")
-  root.after(EVERY, update, root) 
+space_pressed = False
+
+def update(root, canvas, gm):
+  root.after(EVERY, update, root, canvas, gm) 
+  canvas.delete('all')
+  global space_pressed
+  gm.update(space_pressed)
+
+  bird = gm.bird
+  canvas.create_oval(bird.x - bird.radius, bird.y - bird.radius, bird.x + bird.radius, bird.y + bird.radius)
+
+  for pole in gm.poles:
+    canvas.create_line(pole.x, pole.hole_top, pole.x, 0)
+    canvas.create_line(pole.x, pole.hole_top + game.POLE_HOLE_HEIGHT, pole.x, game.HEIGHT)
 
 def main():
   root = tkinter.Tk()
-  update(root)
+  root.attributes('-type', 'dialog')
+  canvas = tkinter.Canvas(root, bg="white", height=game.HEIGHT, width=game.WIDTH)
+  canvas.pack()
+  gm = game.Game() 
+  root.bind('<KeyPress-Return>', handleKeyPress)
+  root.bind('<KeyRelease-Return>', handleKeyRelease)
+  update(root, canvas, gm)
   root.mainloop()
+
+def handleKeyPress(event):
+  global space_pressed
+  space_pressed = True 
+
+def handleKeyRelease(event):
+  global space_pressed
+  space_pressed = False 
 
 if __name__ == '__main__':
   main()

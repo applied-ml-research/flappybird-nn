@@ -5,18 +5,22 @@ HEIGHT = 600
 
 BIRD_X = 100
 BIRD_START_Y = 300
+BIRD_RADIUS = 10
+
 GRAVITY = 0.8
 
 POLE_HOLE_HEIGHT = 100
-POLE_MIN_BOT = 0
-POLE_MAX_TOP = 800
-POLE_THRESHOLD = 550
-POLE_VELOCITY_X = 10
+POLE_MARGIN = 50
+POLE_MIN_BOT = HEIGHT - POLE_MARGIN
+POLE_MAX_TOP = POLE_MARGIN
+POLE_THRESHOLD = 500
+POLE_VELOCITY_X = 7
 
 class Bird:
   def __init__(self):
     self.x = BIRD_X
     self.y = BIRD_START_Y
+    self.radius = BIRD_RADIUS
     self.acceleration = GRAVITY
     self.velocity_y = 0
 
@@ -31,7 +35,7 @@ class Bird:
 class Pole:
   def __init__(self):
     try:
-      self.hole_top = random.randint(POLE_MIN_BOT + POLE_HOLE_HEIGHT, POLE_MAX_TOP)
+      self.hole_top = random.randint(POLE_MAX_TOP, POLE_MIN_BOT - POLE_HOLE_HEIGHT)
     except ValueError as e:
       raise Exception("Pole creation failed: difference between POLE_MAX_TOP and POLE_MIN_BOT is less than POLE_HOLE_HEIGHT").with_traceback(e.__traceback__) from None
     self.x = WIDTH
@@ -43,15 +47,15 @@ class Pole:
 class Game:
   def __init__(self):
     self.bird = Bird()
-    self.poles = [POLE()]
+    self.poles = [Pole()]
     self.score = 0
 
   def update(self, flying):
     self.bird.update(flying)
-    for pole in poles:
+    for pole in self.poles:
       pole.update()
       # CHECK COLLISION 
-    if poles[0].x <= 0:
-      poles = poles[1:] 
-    if poles[-1].x <= POLE_THRESHOLD:
-      poles.append(Pole())
+    if self.poles[0].x <= 0:
+      self.poles = self.poles[1:] 
+    if self.poles[-1].x <= POLE_THRESHOLD:
+      self.poles.append(Pole())
