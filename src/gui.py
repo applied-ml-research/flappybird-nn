@@ -8,10 +8,10 @@ EVERY = 1000//FPS
 space_pressed = False
 
 def update(root, canvas, gm):
-  root.after(EVERY, update, root, canvas, gm) 
   canvas.delete('all')
   global space_pressed
-  gm.update(space_pressed)
+  if not gm.update(space_pressed):
+    gm = game.Game() 
 
   bird = gm.bird
   canvas.create_oval(bird.x - bird.radius, bird.y - bird.radius, bird.x + bird.radius, bird.y + bird.radius)
@@ -19,6 +19,7 @@ def update(root, canvas, gm):
   for pole in gm.poles:
     canvas.create_line(pole.x, pole.hole_top, pole.x, 0)
     canvas.create_line(pole.x, pole.hole_top + game.POLE_HOLE_HEIGHT, pole.x, game.HEIGHT)
+  root.after(EVERY, update, root, canvas, gm) 
 
 def main():
   root = tkinter.Tk()

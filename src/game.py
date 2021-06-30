@@ -32,6 +32,8 @@ class Bird:
     self.velocity_y += self.acceleration
     self.y += self.velocity_y
 
+    return not self.y <= 0 and not self.y >= HEIGHT
+
 class Pole:
   def __init__(self):
     try:
@@ -50,12 +52,23 @@ class Game:
     self.poles = [Pole()]
     self.score = 0
 
+  def cleanup(self):
+    del self.bird
+    del self.poles
+
   def update(self, flying):
-    self.bird.update(flying)
+    bird = self.bird
+    if not bird.update(flying):
+      self.cleanup()
+      return False
     for pole in self.poles:
       pole.update()
-      # CHECK COLLISION 
+      if pole.x >= bird.x - bird.radius and pole.x <= bird.x + bird.radius:
+        if pole.hole_top >= bird.y - bird.radius or pole.hole_top + POLE_HOLE_HEIGHT <= bird.y + bird.radius:
+          self.cleanup()
+          return False
     if self.poles[0].x <= 0:
       self.poles = self.poles[1:] 
     if self.poles[-1].x <= POLE_THRESHOLD:
       self.poles.append(Pole())
+    return True
