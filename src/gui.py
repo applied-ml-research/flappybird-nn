@@ -5,7 +5,9 @@ import tkinter
 FPS = 30
 EVERY = 1000//FPS
 
+BACKGROUND = 'white'
 BIRD_COLOR = 'black'
+BIRD_COLOR_PRESSED = 'red'
 
 space_pressed = False
 canvas_buffer = []
@@ -13,7 +15,7 @@ canvas_buffer = []
 def main():
   root = tkinter.Tk()
   root.attributes('-type', 'dialog')
-  canvas = tkinter.Canvas(root, bg="white", height=game.HEIGHT, width=game.WIDTH)
+  canvas = tkinter.Canvas(root, bg=BACKGROUND, height=game.HEIGHT, width=game.WIDTH)
   canvas.pack()
   gm = game.Game() 
   root.bind('<KeyPress-Return>', handleKeyPress)
@@ -27,9 +29,13 @@ def update(root, canvas, gm):
   if not gm.update(space_pressed):
     gm = game.Game() 
 
+  if space_pressed:
+    color = BIRD_COLOR_PRESSED
+  else:
+    color = BIRD_COLOR
   next_buffer=[]
   bird = gm.bird
-  next_buffer.append(canvas.create_oval(bird.x - bird.radius, bird.y - bird.radius, bird.x + bird.radius, bird.y + bird.radius, fill=BIRD_COLOR))
+  next_buffer.append(canvas.create_oval(bird.x - bird.radius, bird.y - bird.radius, bird.x + bird.radius, bird.y + bird.radius, fill=color))
 
   for pole in gm.poles:
     next_buffer.append(canvas.create_line(pole.x, pole.hole_top, pole.x, 0))
