@@ -68,7 +68,7 @@ class Game:
         if pole.hole_top >= bird.y - bird.radius or pole.hole_top + POLE_HOLE_HEIGHT <= bird.y + bird.radius:
           self.cleanup()
           return False
-    if self.poles[0].x <= 0:
+    if self.poles[0].x <= bird.x:
       self.poles = self.poles[1:] 
     if self.poles[-1].x <= POLE_THRESHOLD:
       self.poles.append(Pole())
