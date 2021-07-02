@@ -51,6 +51,7 @@ class Game:
     self.bird = Bird()
     self.poles = [Pole()]
     self.score = 0
+    self.alive = True
 
   def cleanup(self):
     del self.bird
@@ -61,6 +62,7 @@ class Game:
     bird = self.bird
     if not bird.update(flying):
       self.cleanup()
+      self.alive = False
       return False
     for pole in self.poles:
       pole.update()
@@ -73,3 +75,7 @@ class Game:
     if self.poles[-1].x <= POLE_THRESHOLD:
       self.poles.append(Pole())
     return True
+
+  def get_nn_inputs(self):
+    reward = 1 if self.alive else -100
+    return reward, self.alive, self.score
