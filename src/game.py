@@ -16,6 +16,17 @@ POLE_MAX_TOP = POLE_MARGIN
 POLE_THRESHOLD = 500
 POLE_VELOCITY_X = 7
 
+STATE_BIRD_X = 0
+STATE_BIRD_Y = 1
+STATE_FLYING = 2
+STATE_POLES = 3
+
+STATE_POLE_X = 0
+STATE_POLE_HOLE_TOP = 1
+
+REWARD_SURVIVAL = 1
+REWARD_DEATH = -100
+
 class Bird:
   def __init__(self):
     self.x = BIRD_X
@@ -45,13 +56,23 @@ class Pole:
   def update(self):
     self.x -= POLE_VELOCITY_X
 
-
 class Game:
   def __init__(self):
     self.bird = Bird()
     self.poles = [Pole()]
     self.score = 0
     self.alive = True
+
+    self.states = []
+    self.__add_current_state(False)
+
+  def __add_current_state(self, flying):
+    self.states.append((
+      self.bird.x,
+      self.bird.y,
+      flying,
+      tuple(map(lambda pole: (pole.x, pole.hole_top), self.poles))
+    ))
 
   def cleanup(self):
     del self.bird
@@ -75,8 +96,9 @@ class Game:
       self.poles = self.poles[1:] 
     if self.poles[-1].x <= POLE_THRESHOLD:
       self.poles.append(Pole())
+    self.__add_current_state(flying)
     return True
 
   def get_nn_inputs(self):
-    reward = 1 if self.alive else -100
+    reward = REWARD_SURVIVAL if self.alive else REWARD_DEATH
     return reward, self.alive, self.score
