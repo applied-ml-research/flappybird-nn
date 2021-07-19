@@ -35,7 +35,7 @@ def update(root, canvas, gm):
     color = BIRD_COLOR
   next_buffer=[]
   bird = gm.bird
-  next_buffer.append(canvas.create_oval(bird.x - bird.radius, bird.y - bird.radius, bird.x + bird.radius, bird.y + bird.radius, fill=color))
+  next_buffer.append(canvas.create_oval(bird.x - game.BIRD_RADIUS, bird.y - game.BIRD_RADIUS, bird.x + game.BIRD_RADIUS, bird.y + game.BIRD_RADIUS, fill=color))
 
   for pole in gm.poles:
     next_buffer.append(canvas.create_line(pole.x, pole.hole_top, pole.x, 0))

@@ -31,7 +31,6 @@ class Bird:
   def __init__(self):
     self.x = BIRD_X
     self.y = BIRD_START_Y
-    self.radius = BIRD_RADIUS
     self.acceleration = GRAVITY
     self.velocity_y = 0
 
@@ -87,8 +86,8 @@ class Game:
       return False
     for pole in self.poles:
       pole.update()
-      if pole.x >= bird.x - bird.radius and pole.x <= bird.x + bird.radius:
-        if pole.hole_top >= bird.y - bird.radius or pole.hole_top + POLE_HOLE_HEIGHT <= bird.y + bird.radius:
+      if pole.x >= bird.x - BIRD_RADIUS and pole.x <= bird.x + BIRD_RADIUS: 
+        if pole.hole_top >= bird.y - BIRD_RADIUS or pole.hole_top + POLE_HOLE_HEIGHT <= bird.y + BIRD_RADIUS: 
           self.cleanup()
           self.alive = False
           return False
