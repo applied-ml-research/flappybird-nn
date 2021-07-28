@@ -45,7 +45,7 @@ def train_nn_1(nn, reward=1.0, death_reward=-100.0, reward_decay=0.9, sample_rat
 
   nn['memory'] = []
 
-def run(file, nn_params={'init': init_nn_1, 'eval': eval_nn_1, 'train': train_nn_1}, save_every=100, until=100000):
+def run(file, nn_params={'init': init_nn_1, 'eval': eval_nn_1, 'train': train_nn_1}, save_every=100, until=10000):
   nn = nn_params['init']()
   data = []
   for i in range(1, until + 1):
