@@ -5,15 +5,16 @@ import pickle
 import random
 import torch
 
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 def init_nn_1(learning_rate=0.1):
-  device = 'cuda' if torch.cuda.is_available() else 'cpu'
   model = torch.nn.Sequential(
     torch.nn.Linear(4, 8),
     torch.nn.ReLU(),
     torch.nn.Linear(8, 6),
     torch.nn.Sigmoid(),
     torch.nn.Linear(6, 2),
-  ).to(device)
+  ).to(DEVICE)
   return {
     'model': model,
     'loss': torch.nn.MSELoss(),
@@ -24,7 +25,7 @@ def init_nn_1(learning_rate=0.1):
 def eval_nn_1(nn, gm):
   bird = gm.bird
   pole = gm.poles[0]
-  evaluation = nn['model'](torch.FloatTensor([bird.y, bird.velocity_y, pole.x, pole.hole_top]))
+  evaluation = nn['model'](torch.FloatTensor([bird.y, bird.velocity_y, pole.x, pole.hole_top]).to(DEVICE))
   nn['memory'].append(evaluation)
   return evaluation[1] > evaluation[0]
 
@@ -38,7 +39,7 @@ def train_nn_1(nn, reward=1.0, death_reward=-100.0, reward_decay=0.9, sample_rat
     loss.backward()
     nn['optimizer'].step()
 
-  step(-1, torch.tensor(death_reward))
+  step(-1, torch.tensor(death_reward).to(DEVICE))
   for idx in sample:
     step(sample[idx], reward + reward_decay * nn['memory'][sample[idx] + 1])
 
