@@ -54,8 +54,9 @@ def run(file, nn_params={'init': init_nn_1, 'eval': eval_nn_1, 'train': train_nn
     while not game_end:
       flying = nn_params['eval'](nn, gm)
       game_end = gm.update(flying)
-     
+    data.append(gm.states)    
     nn_params['train'](nn)
+
     if i % save_every == 0:
       pickle.dump(data, open(file, 'wb'))
       print('saved (epoch %d)' % i)

@@ -1,5 +1,6 @@
 import game
 
+import pickle
 import sys
 import tkinter
 
@@ -11,6 +12,14 @@ BIRD_COLOR = 'black'
 BIRD_COLOR_PRESSED = 'red'
 
 canvas_buffer = []
+
+def replay(file, epoch):
+  data = pickle.load(open(file, 'rb'))
+  root.attributes('-type', 'dialog')
+  canvas = tkinter.Canvas(root, bg=BACKGROUND, height=game.HEIGHT, width=game.WIDTH)
+  canvas.pack()
+  update(root, canvas, data[epoch])
+  root.mainloop()
 
 def update(root, canvas, state_list):
   global canvas_buffer
@@ -37,5 +46,5 @@ def update(root, canvas, state_list):
   canvas_buffer = next_buffer
   root.after(EVERY, update, root, canvas, state_list[1:]) 
 
-def replay(root, canvas, state_list):
-  update(root, canvas, state_list) 
+if __name__ == '__main__':
+  main()
