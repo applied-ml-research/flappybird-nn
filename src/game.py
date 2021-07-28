@@ -94,7 +94,3 @@ class Game:
       self.poles.append(Pole())
     self.__add_current_state(flying)
     return True
-
-  def get_nn_inputs(self):
-    reward = REWARD_SURVIVAL if self.alive else REWARD_DEATH
-    return reward, self.alive, self.score
