@@ -24,9 +24,6 @@ STATE_POLES = 3
 STATE_POLE_X = 0
 STATE_POLE_HOLE_TOP = 1
 
-REWARD_SURVIVAL = 1
-REWARD_DEATH = -100
-
 class Bird:
   def __init__(self):
     self.x = BIRD_X
