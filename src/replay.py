@@ -15,9 +15,12 @@ canvas_buffer = []
 
 def replay(file, epoch):
   data = pickle.load(open(file, 'rb'))
+  root = tkinter.Tk()
   root.attributes('-type', 'dialog')
   canvas = tkinter.Canvas(root, bg=BACKGROUND, height=game.HEIGHT, width=game.WIDTH)
   canvas.pack()
+  for point in data[epoch]:
+    print(point)
   update(root, canvas, data[epoch])
   root.mainloop()
 
